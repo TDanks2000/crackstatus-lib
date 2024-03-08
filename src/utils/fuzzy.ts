@@ -21,7 +21,7 @@ export const Fuzzy = async (
   options = defaultOptions,
 ): Promise<ProviderResponse | null> => {
   const items = list
-    .filter(({ title }) => !flags.skip.some(flag => title.includes(flag)))
+    .filter(({ title }) => !flags.skip.some((flag) => title.includes(flag)))
     // remove weird letters
     .map(({ title, group }) => ({
       title: title.replace(clearRegex, ''),
