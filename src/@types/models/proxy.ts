@@ -28,7 +28,10 @@ export class Proxy {
    * @param proxyConfig The proxy config (optional)
    * @param adapter The axios adapter (optional)
    */
-  constructor(protected proxyConfig?: ProxyConfig, protected adapter?: AxiosAdapter) {
+  constructor(
+    protected proxyConfig?: ProxyConfig,
+    protected adapter?: AxiosAdapter,
+  ) {
     this.client = axios.create();
 
     if (proxyConfig) this.setProxy(proxyConfig);
@@ -51,7 +54,7 @@ export class Proxy {
       this.rotateProxy({ ...proxyConfig, urls: proxyConfig.url });
     }
 
-    this.client.interceptors.request.use((config) => {
+    this.client.interceptors.request.use(config => {
       if (proxyConfig?.url) {
         config.headers.set(
           {

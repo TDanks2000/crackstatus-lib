@@ -9,7 +9,15 @@ node_modules
 Dockerfile
 Dockerfile.*
 .eslintrc
+.gitignore
+.prettierignore
 *.html
 /examples
 /docs
 jest.config.ts
+
+**/.git
+**/.idea
+**/.svn
+**/.hg
+**/node_modules
