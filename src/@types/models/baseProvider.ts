@@ -1,4 +1,5 @@
-import { ProviderResponse } from '../types';
+import { load } from 'cheerio';
+import { ProviderInfoResponse, ProviderResponse } from '../types';
 import Proxy from './proxy';
 
 /**
@@ -6,12 +7,26 @@ import Proxy from './proxy';
  * @abstract
  * @extends Proxy
  */
-// TODO: Tommy should it return only 1 results when searching? what if u search witcher and u want too see all results?
+
 abstract class BaseProvider extends Proxy {
   abstract readonly name: string;
   abstract readonly url: string;
 
-  abstract search(query: string, ...args: any[]): Promise<ProviderResponse | null>;
+  abstract search(
+    query: string,
+    extraData?: {
+      year?: number;
+      genres?: string[];
+    },
+    ...args: any[]
+  ): Promise<ProviderResponse | null>;
+
+  abstract info(id: string, ...args: any[]): Promise<ProviderInfoResponse | null>;
+
+  async loadHTML(url: string) {
+    const result = await this.client.get(url);
+    return load(result.data);
+  }
 }
 
 export { BaseProvider };

@@ -1,7 +1,7 @@
 export interface ProviderResponse {
   title: string;
   group: string | null;
-  [x: string]: any;
+  [x: string]: unknown;
 }
 
 export interface ProviderInfoResponse {
@@ -10,6 +10,7 @@ export interface ProviderInfoResponse {
   downloads: Link[];
   image: string;
   screenshots: string[];
+  [x: string]: unknown;
 }
 
 export interface Link {
