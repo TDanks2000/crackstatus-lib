@@ -1,7 +1,8 @@
 import {Elamigos} from "./providers/elamigos";
+import {FitGirl} from "./providers/fitgirl";
 
-const elamigos = new Elamigos();
-elamigos.getInfo('https://www.elamigos-games.net/games/grim-dawn-definitive-edition').then(result => {
+const elamigos = new FitGirl();
+elamigos.getInfo('https://fitgirl-repacks.site/the-witcher-3-wild-hunt-complete-edition/').then(result => {
     console.log(result);
 }).catch(err => {
     console.error('An error occurred:', err);
