@@ -1,5 +1,8 @@
 import axios, { AxiosAdapter, AxiosInstance } from 'axios';
 
+/**
+ * Represents the configuration for a proxy.
+ */
 export interface ProxyConfig {
   /**
    * The proxy URL
@@ -16,6 +19,9 @@ export interface ProxyConfig {
   rotateInterval?: number;
 }
 
+/**
+ * The Proxy class provides a way to configure and manage HTTP proxies for making requests using Axios.
+ */
 export class Proxy {
   /**
    *
