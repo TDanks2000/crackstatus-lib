@@ -1,0 +1,19 @@
+{
+  "name": "CrackTrak-lib-v2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {},
+  "devDependencies": {
+    "@types/node": "^20.11.25",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "cheerio": "^1.0.0-rc.12",
+    "fuzzysort": "^2.0.4",
+    "tslib": "^2.6.2",
+    "urlcat": "^3.1.0"
+  }
+}
