@@ -1,7 +1,7 @@
 import {Elamigos} from "./providers/elamigos";
 
 const elamigos = new Elamigos();
-elamigos.search('Witcher').then(result => {
+elamigos.getInfo('https://www.elamigos-games.net/games/grim-dawn-definitive-edition').then(result => {
     console.log(result);
 }).catch(err => {
     console.error('An error occurred:', err);

@@ -2,71 +2,76 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import {BaseProvider, Link, ProviderInfoResponse, ProviderResponse} from "../@types";
 
-
- /**
-  * Fetches data from the given URL and returns the loaded HTML content.
-  *
-  * @param {string} url - The URL to fetch data from.
-  * @returns {Promise<CheerioStatic>} - A promise that resolves to the loaded HTML content.
-  */
- async function fetchData(url: string) {
+/**
+ * Fetches data from a given URL.
+ *
+ * @param {string} url - The URL from which to fetch the data.
+ * @return {Promise<CheerioStatic>} - A promise that resolves with the loaded data.
+ */
+async function fetchData(url: string) {
     const result = await axios.get(url);
     return cheerio.load(result.data);
 }
 
-
 /**
- * Elamigos class is a subclass of BaseProvider that represents the Elamigos provider.
- * It provides functionality to search for a specific query and get information about a URL.
+ * Class representing the Elamigos provider.
+ * @extends BaseProvider
  */
 export class Elamigos extends BaseProvider {
     name: string = 'elamigos';
-    url: string = 'https://www.elamigos.site/';
+    url: string = 'https://www.elamigos-games.net/';
 
     /**
-     * Searches for a matching title in a fetched HTML content.
-     *
-     * @param {string} query - The query string to search.
-     * @returns {Promise<ProviderResponse | null>} A promise that resolves to a ProviderResponse object if a match is found, or null otherwise.
+     * Searches for a matching item in the provided URL
+     * @param {string} query - The search query to be used
+     * @returns {Promise<ProviderResponse | null>} - A promise that resolves to the scraped data if a match is found, otherwise null
      */
     async search(query: string): Promise<ProviderResponse | null> {
-        const $ = await fetchData(this.url);
+        // Update the URL to include the search query parameter
+        const searchUrl = `${this.url}?q=${encodeURIComponent(query)}`;
+        const $ = await fetchData(searchUrl);
         let scrapData: ProviderResponse | null = null;
 
-        $('h3').each((_idx, el) => {
+        // Iterate through each portfolio-item to find the game titles and URLs
+        $('.portfolio-item').each((_idx, el) => {
             if (scrapData) return; // If we already found a match, exit the loop
-            const title = $(el).text().trim();
-            const url = $(el).find('a').attr('href') || '';
+            const title = $(el).find('.card-body .card-title a').text().trim();
+            const url = $(el).find('.card-body .card-title a').attr('href') || '';
             if (title.toLowerCase().includes(query.toLowerCase())) {
                 scrapData = { title, group: null, url };
+                return false; // Exit the loop after finding the first match
             }
         });
 
         return scrapData;
     }
-    // TODO: use the download link to navigate here
+
+
     /**
      * Retrieves information about a provider from a given URL.
      *
-     * @param {string} url - The URL to fetch the provider information from.
-     * @returns {Promise<ProviderInfoResponse>} A promise that resolves to the provider information.
+     * @param {string} url - The URL of the provider's information page.
+     * @returns {Promise<ProviderInfoResponse>} - A promise that resolves to an object containing the provider's information.
      */
     async getInfo(url: string): Promise<ProviderInfoResponse> {
         const $ = await fetchData(url);
         const title = $('h2').first().text().trim();
         const image = $('img').first().attr('src') || '';
-        const downloads: Link[] = [];
 
-        $('h2').each((_idx, el) => {
-            const downloadProvider = $(el).text().trim();
-            if (downloadProvider === 'DDOWNLOAD' || downloadProvider === 'RAPIDGATOR') {
-                $(el).nextUntil('h2', 'h3').each((_idx, linkEl) => { // Use nextUntil to get all h3 until the next h2
-                    const url = $(linkEl).find('a').attr('href') || '';
-                    if (!downloads.some(link => link.url === url)) { // Check if the url is not already in the downloads array
-                        const name = $(linkEl).text().trim();
-                        downloads.push({ name, url });
-                    }
-                });
+        const screenshots: string[] = [];
+
+        $('.row .col-md-3.col-sm-6.mb-4 a').each((_idx, el) => {
+            const screenshotUrl = $(el).attr('href') || '';
+            if (screenshotUrl) {
+                screenshots.push(screenshotUrl);
+            }
+        });
+        const downloads: Link[] = [];
+        $('#dw a').each((_idx, el) => {
+            const url = $(el).attr('href') || '';
+            const name = $(el).text().trim();
+            if (url) {
+                downloads.push({ name, url });
             }
         });
 
@@ -75,9 +80,10 @@ export class Elamigos extends BaseProvider {
             group: null,
             downloads,
             image,
-            screenshots: [],
+            screenshots,
         };
     }
+
 }
 
 
