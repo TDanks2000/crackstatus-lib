@@ -17,7 +17,7 @@ export class Elamigos extends BaseProvider {
     // Update the URL to include the search query parameter
     const searchUrl = `${this.url}?q=${encodeURIComponent(query)}`;
     const $ = await this.loadHTML(searchUrl);
-    this.adapter;
+
     let scrapData: ProviderResponse | null = null;
 
     // Iterate through each portfolio-item to find the game titles and URLs
@@ -53,6 +53,7 @@ export class Elamigos extends BaseProvider {
         screenshots.push(screenshotUrl);
       }
     });
+
     const downloads: Link[] = [];
     $('#dw a').each((_idx, el) => {
       const url = $(el).attr('href') || '';
