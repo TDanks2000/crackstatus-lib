@@ -1,16 +1,21 @@
-// TODO: Redo sort and remove fuzzysort for other fuzzy sorting package
-import fuzzy from 'fuzzysort';
+// Import Fuse from fuse.js
+import Fuse from 'fuse.js';
 import { ProviderResponse } from '../@types';
 
 const flags = {
   skip: ['uncracked', 'unlocked'],
 };
 
-// play around with these settings
+// Adjust the options to match those expected by fuse.js
 const defaultOptions = {
-  allowTypo: false,
-  limit: 1,
-  threshold: -12,
+  includeScore: true,
+  shouldSort: true,
+  threshold: 0.6, // Adjust the threshold as needed
+  location: 0,
+  distance: 100,
+  maxPatternLength: 32,
+  minMatchCharLength: 1,
+  keys: ['title'], // Specify the keys to search in
 };
 
 const clearRegex = /[^\w\s]/g;
@@ -28,11 +33,12 @@ export const Fuzzy = async (
       group,
     }));
 
-  const result = fuzzy.go(query.replace(clearRegex, ''), items, {
-    ...defaultOptions,
-    ...options,
-    key: 'title',
-  });
+  // Create a Fuse instance with the items and options
+  const fuse = new Fuse(items, options);
 
-  return result.length > 0 ? result[0].obj : null;
+  // Perform the search
+  const result = fuse.search(query.replace(clearRegex, ''));
+
+  // Return the first result if any, otherwise null
+  return result.length > 0 ? result[0].item : null;
 };

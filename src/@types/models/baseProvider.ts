@@ -27,6 +27,10 @@ abstract class BaseProvider extends Proxy {
     const result = await this.client.get(url);
     return load(result.data);
   }
+
+  sanitizeString(string: string) {
+    return string.replace(/[^a-zA-Z0-9 ]/g, '');
+  }
 }
 
 export { BaseProvider };

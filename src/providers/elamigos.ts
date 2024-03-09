@@ -1,4 +1,5 @@
 import { BaseProvider, Link, ProviderInfoResponse, ProviderResponse } from '../@types';
+import { Fuzzy } from '../utils';
 
 /**
  * Class representing the Elamigos provider.
@@ -15,23 +16,25 @@ export class Elamigos extends BaseProvider {
    */
   async search(query: string): Promise<ProviderResponse | null> {
     // Update the URL to include the search query parameter
-    const searchUrl = `${this.url}?q=${encodeURIComponent(query)}`;
+    const searchUrl = `${this.url}?q=${encodeURIComponent(this.sanitizeString(query))}`;
+
+    console.log(this.sanitizeString(query));
     const $ = await this.loadHTML(searchUrl);
 
-    let scrapData: ProviderResponse | null = null;
+    const titles: string[] = [];
 
     // Iterate through each portfolio-item to find the game titles and URLs
     $('.portfolio-item').each((_idx, el) => {
-      if (scrapData) return; // If we already found a match, exit the loop
       const title = $(el).find('.card-body .card-title a').text().trim();
-      const url = $(el).find('.card-body .card-title a').attr('href') || '';
-      if (title.toLowerCase().includes(query.toLowerCase())) {
-        scrapData = { title, group: null, url };
-        return false; // Exit the loop after finding the first match
-      }
+      titles.push(title);
     });
 
-    return scrapData;
+    const result = await Fuzzy(
+      titles.map(title => ({ title, group: this.name })),
+      query,
+    );
+
+    return result;
   }
 
   /**

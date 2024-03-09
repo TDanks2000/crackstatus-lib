@@ -1,4 +1,5 @@
 import { BaseProvider, Link, ProviderInfoResponse, ProviderResponse } from '../@types';
+import { Fuzzy } from '../utils';
 
 /**
  * FitGirl class.
@@ -16,18 +17,25 @@ export class FitGirl extends BaseProvider {
    * @returns {Promise<ProviderResponse | null>} A promise that resolves to the scraped data if found, or null otherwise.
    */
   async search(query: string): Promise<ProviderResponse | null> {
-    const searchUrl = `${this.url}/?s=${encodeURIComponent(query)}`;
+    const searchUrl = `${this.url}/?s=${encodeURIComponent(this.sanitizeString(query))}`;
+
     const $ = await this.loadHTML(searchUrl);
-    let scrapData: ProviderResponse | null = null;
 
-    const entryTitle = $('h1.entry-title a').first();
-    if (entryTitle.length) {
-      const title = entryTitle.text().trim();
-      const url = entryTitle.attr('href') || '';
-      scrapData = { title, group: null, url };
-    }
+    const container = $('div#content.site-content');
 
-    return scrapData;
+    const titles: string[] = [];
+    container.find('article.post').each((i, el) => {
+      const title = $(el).find('.entry-title').find('a').first().text().trim();
+
+      title && titles.push(title);
+    });
+
+    const result = await Fuzzy(
+      titles.map(title => ({ title, group: this.name })),
+      query,
+    );
+
+    return result;
   }
   /**
    * Retrieves information from a given URL.
@@ -75,7 +83,7 @@ export class FitGirl extends BaseProvider {
 
     return {
       title,
-      group: null,
+      group: this.name,
       downloads,
       image,
       screenshots,
