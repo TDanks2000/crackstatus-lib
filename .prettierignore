@@ -21,3 +21,4 @@ jest.config.ts
 **/.svn
 **/.hg
 **/node_modules
+**/dist
