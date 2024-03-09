@@ -13,16 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Fuzzy = void 0;
-// TODO: Redo sort and remove fuzzysort for other fuzzy sorting package
-const fuzzysort_1 = __importDefault(require("fuzzysort"));
+// Import Fuse from fuse.js
+const fuse_js_1 = __importDefault(require("fuse.js"));
 const flags = {
     skip: ['uncracked', 'unlocked'],
 };
-// play around with these settings
+// Adjust the options to match those expected by fuse.js
 const defaultOptions = {
-    allowTypo: false,
-    limit: 1,
-    threshold: -12,
+    includeScore: true,
+    shouldSort: true,
+    threshold: 0.6, // Adjust the threshold as needed
+    location: 0,
+    distance: 100,
+    maxPatternLength: 32,
+    minMatchCharLength: 1,
+    keys: ['title'], // Specify the keys to search in
 };
 const clearRegex = /[^\w\s]/g;
 const Fuzzy = (list_1, query_1, ...args_1) => __awaiter(void 0, [list_1, query_1, ...args_1], void 0, function* (list, query, options = defaultOptions) {
@@ -33,7 +38,11 @@ const Fuzzy = (list_1, query_1, ...args_1) => __awaiter(void 0, [list_1, query_1
         title: title.replace(clearRegex, ''),
         group,
     }));
-    const result = fuzzysort_1.default.go(query.replace(clearRegex, ''), items, Object.assign(Object.assign(Object.assign({}, defaultOptions), options), { key: 'title' }));
-    return result.length > 0 ? result[0].obj : null;
+    // Create a Fuse instance with the items and options
+    const fuse = new fuse_js_1.default(items, options);
+    // Perform the search
+    const result = fuse.search(query.replace(clearRegex, ''));
+    // Return the first result if any, otherwise null
+    return result.length > 0 ? result[0].item : null;
 });
 exports.Fuzzy = Fuzzy;

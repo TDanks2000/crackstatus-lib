@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FitGirl = void 0;
 const _types_1 = require("../@types");
+const utils_1 = require("../utils");
 /**
  * FitGirl class.
  *
@@ -30,16 +31,16 @@ class FitGirl extends _types_1.BaseProvider {
      */
     search(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const searchUrl = `${this.url}/?s=${encodeURIComponent(query)}`;
+            const searchUrl = `${this.url}/?s=${encodeURIComponent(this.sanitizeString(query))}`;
             const $ = yield this.loadHTML(searchUrl);
-            let scrapData = null;
-            const entryTitle = $('h1.entry-title a').first();
-            if (entryTitle.length) {
-                const title = entryTitle.text().trim();
-                const url = entryTitle.attr('href') || '';
-                scrapData = { title, group: null, url };
-            }
-            return scrapData;
+            const container = $('div#content.site-content');
+            const titles = [];
+            container.find('article.post').each((i, el) => {
+                const title = $(el).find('.entry-title').find('a').first().text().trim();
+                title && titles.push(title);
+            });
+            const result = yield (0, utils_1.Fuzzy)(titles.map(title => ({ title, group: this.name })), query);
+            return result;
         });
     }
     /**
@@ -86,7 +87,7 @@ class FitGirl extends _types_1.BaseProvider {
             });
             return {
                 title,
-                group: null,
+                group: this.name,
                 downloads,
                 image,
                 screenshots,

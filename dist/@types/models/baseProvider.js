@@ -27,5 +27,8 @@ class BaseProvider extends proxy_1.default {
             return (0, cheerio_1.load)(result.data);
         });
     }
+    sanitizeString(string) {
+        return string.replace(/[^a-zA-Z0-9 ]/g, '');
+    }
 }
 exports.BaseProvider = BaseProvider;

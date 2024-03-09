@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Elamigos = void 0;
 const _types_1 = require("../@types");
+const utils_1 = require("../utils");
 /**
  * Class representing the Elamigos provider.
  * @extends BaseProvider
@@ -29,21 +30,17 @@ class Elamigos extends _types_1.BaseProvider {
     search(query) {
         return __awaiter(this, void 0, void 0, function* () {
             // Update the URL to include the search query parameter
-            const searchUrl = `${this.url}?q=${encodeURIComponent(query)}`;
+            const searchUrl = `${this.url}?q=${encodeURIComponent(this.sanitizeString(query))}`;
+            console.log(this.sanitizeString(query));
             const $ = yield this.loadHTML(searchUrl);
-            let scrapData = null;
+            const titles = [];
             // Iterate through each portfolio-item to find the game titles and URLs
             $('.portfolio-item').each((_idx, el) => {
-                if (scrapData)
-                    return; // If we already found a match, exit the loop
                 const title = $(el).find('.card-body .card-title a').text().trim();
-                const url = $(el).find('.card-body .card-title a').attr('href') || '';
-                if (title.toLowerCase().includes(query.toLowerCase())) {
-                    scrapData = { title, group: null, url };
-                    return false; // Exit the loop after finding the first match
-                }
+                titles.push(title);
             });
-            return scrapData;
+            const result = yield (0, utils_1.Fuzzy)(titles.map(title => ({ title, group: this.name })), query);
+            return result;
         });
     }
     /**
