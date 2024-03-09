@@ -8,13 +8,6 @@
     "lint": "prettier --write .",
     "build": "tsc"
   },
-  "pre-commit": [
-    "lint",
-    "build"
-  ],
-  "files": [
-    "dist"
-  ],
   "devDependencies": {
     "@types/node": "^20.11.25",
     "pre-commit": "^1.2.2",
@@ -27,6 +20,7 @@
     "cheerio": "^1.0.0-rc.12",
     "fuzzysort": "^2.0.4",
     "tslib": "^2.6.2",
-    "urlcat": "^3.1.0"
+    "urlcat": "^3.1.0",
+    "yarn": "^1.22.21"
   }
 }

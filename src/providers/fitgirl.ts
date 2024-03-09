@@ -39,6 +39,7 @@ export class FitGirl extends BaseProvider {
     const $ = await this.loadHTML(url);
     const title = $('h1.entry-title').first().text().trim();
     const image = $('p a img.alignleft').first().attr('src') || '';
+
     const screenshots: string[] = [];
     // Extract screenshots
     $('h3').each((_idx, el) => {
@@ -54,6 +55,7 @@ export class FitGirl extends BaseProvider {
           });
       }
     });
+
     const downloads: Link[] = [];
     $('h3').each((_idx, el) => {
       if ($(el).text().trim() === 'Download Mirrors') {
