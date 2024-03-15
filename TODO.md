@@ -3,7 +3,6 @@
   - [ ] Dodi
   - [ ] gamestatus (https://gamestatus.info/back/api/gameinfo/game/search_title/)
   - [ ] predb (https://predb.ovh/api/v1)
-  - [ ] skidrow (https://www.skidrowreloaded.com)
   - [X] Elmigos
 
 [+ any others from here](https://rentry.org/pgames#repacks)
