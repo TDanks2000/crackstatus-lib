@@ -1,0 +1,1 @@
+{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/providers/gamestatus/index.ts"],"names":[],"mappings":"AAEA,OAAO,EAAE,oBAAoB,EAAE,MAAM,cAAc,CAAC;AAGpD,qBAAa,UAAU;IACrB,SAAS,CAAC,IAAI,EAAE,MAAM,CAAgB;IACtC,OAAO,CAAC,OAAO,CAA6D;IAEtE,WAAW,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,CAAC,oBAAoB,GAAG,IAAI,CAAC;IA4BtE;;;;;;OAMG;IACH,OAAO,CAAC,iBAAiB,CAAuE;CACjG"}
