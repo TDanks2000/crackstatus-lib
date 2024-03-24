@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios';
 import { load } from 'cheerio';
 import { ProviderInfoResponse, ProviderResponse } from '../types';
 import Proxy from './proxy';
@@ -23,8 +24,8 @@ abstract class BaseProvider extends Proxy {
 
   abstract info(id: string, ...args: any[]): Promise<ProviderInfoResponse | null>;
 
-  async loadHTML(url: string) {
-    const result = await this.client.get(url);
+  async loadHTML(url: string, options?: AxiosRequestConfig) {
+    const result = await this.client.get(url, options);
     return load(result.data);
   }
 

@@ -1,3 +1,4 @@
+import { AxiosRequestConfig } from 'axios';
 import { BaseProvider, Link, ProviderInfoResponse, ProviderResponse } from '../@types';
 import { Fuzzy, parseSize } from '../utils';
 
@@ -10,6 +11,12 @@ export class FitGirl extends BaseProvider {
   name: string = 'fitgirl';
   url: string = 'https://fitgirl-repacks.site';
 
+  private headers: AxiosRequestConfig['headers'] = {
+    Cookie: '__ddg1_=;__ddg2_=;',
+    'User-Agent':
+      'Mozilla/5.0 (Linux; U; Android 5.0.2; Nokia 1000 LTE Build/GRK39F) AppleWebKit/534.27 (KHTML, like Gecko)  Chrome/53.0.3457.238 Mobile Safari/602.6',
+  };
+
   /**
    * Searches for a query within the provider's website.
    *
@@ -19,26 +26,32 @@ export class FitGirl extends BaseProvider {
   async search(query: string): Promise<ProviderResponse | null> {
     const searchUrl = `${this.url}/?s=${encodeURIComponent(this.sanitizeString(query))}`;
 
-    const $ = await this.loadHTML(searchUrl);
+    const $ = await this.loadHTML(searchUrl, {
+      headers: this.headers,
+    });
 
     const container = $('div#content.site-content');
 
     const titles: {
       title: string;
       url: string;
+      id: string;
     }[] = [];
     container.find('article.post').each((i, el) => {
       const title = $(el).find('.entry-title').find('a').first().text().trim();
       const url = $(el).find('.entry-title').find('a').first().attr('href') || '';
+      const id = url.split(this.url)[1].split('/')[1] || '';
+
       title &&
         titles.push({
           title,
           url,
+          id,
         });
     });
 
     const result = await Fuzzy(
-      titles.map(title => ({ title: title.title, url: title.url, group: this.name })),
+      titles.map(title => ({ title: title.title, url: title.url, id: title.id, group: this.name })),
       query,
     );
 
@@ -47,11 +60,16 @@ export class FitGirl extends BaseProvider {
   /**
    * Retrieves information from a given URL.
    *
-   * @param {string} url - The URL to fetch data from.
+   * @param {string} id - The URL or ID to fetch data from.
    * @returns {Promise<ProviderInfoResponse>} The provider info response object.
    */
-  async info(url: string): Promise<ProviderInfoResponse> {
-    const $ = await this.loadHTML(url);
+  async info(id: string): Promise<ProviderInfoResponse> {
+    const url = id.startsWith(this.url) ? id : `${this.url}/${id}`;
+
+    const $ = await this.loadHTML(url, {
+      headers: this.headers,
+    });
+
     const title = $('h1.entry-title').first().text().trim();
     const image = $('p a img.alignleft').first().attr('src') || '';
 
@@ -73,8 +91,8 @@ export class FitGirl extends BaseProvider {
 
     const downloads: Link[] = [];
 
-    const magnet = "ul li a:contains('magnet')";
-    const torrent = "ul li a:contains('.torrent')";
+    const magnet = "a:contains('magnet')";
+    const torrent = "a:contains('.torrent')";
 
     $(magnet).each((_idx, el) => {
       const url = $(el).attr('href') || '';
@@ -121,6 +139,6 @@ export class FitGirl extends BaseProvider {
 
 // (async () => {
 //   const provider = new FitGirl();
-//   const result = await provider.info('https://fitgirl-repacks.site/reverse-collapse-code-name-bakery/');
-//   // console.log(result);
+//   const result = await provider.search('batman');
+//   console.log(result);
 // })();

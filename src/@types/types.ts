@@ -3,6 +3,7 @@ export interface ProviderResponse {
   title: string;
   group: string | null;
   url?: string;
+  id?: string;
   [x: string]: unknown;
 }
 
