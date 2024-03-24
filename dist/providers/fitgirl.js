@@ -62,7 +62,7 @@ class FitGirl extends _types_1.BaseProvider {
                         .next('p')
                         .find('a')
                         .each((_idx, imgEl) => {
-                        const screenshotUrl = $(imgEl).attr('href') || '';
+                        const screenshotUrl = $(imgEl).find('img').attr('src') || '';
                         if (screenshotUrl) {
                             screenshots.push(screenshotUrl);
                         }
@@ -75,7 +75,6 @@ class FitGirl extends _types_1.BaseProvider {
             $(magnet).each((_idx, el) => {
                 const url = $(el).attr('href') || '';
                 const name = $(el).text().trim();
-                console.log($(el).text());
                 if (url) {
                     downloads.push({ name, url });
                 }
@@ -87,14 +86,36 @@ class FitGirl extends _types_1.BaseProvider {
                     downloads.push({ name, url });
                 }
             });
+            let fileSize;
+            let repackSize;
+            const fileSizeSelector = "div p:contains('Original Size:')";
+            $(fileSizeSelector)
+                .first()
+                .text()
+                .split('\n')
+                .forEach(line => {
+                if (line.includes('Original Size:')) {
+                    fileSize = (0, utils_1.parseSize)(line.replace('Original Size:', '').trim());
+                }
+                else if (line.includes('Repack Size:')) {
+                    repackSize = (0, utils_1.parseSize)(line.replace('Repack Size:', ''));
+                }
+            });
             return {
                 title,
                 group: this.name,
                 downloads,
                 image,
                 screenshots,
+                fileSize,
+                repackSize,
             };
         });
     }
 }
 exports.FitGirl = FitGirl;
+// (async () => {
+//   const provider = new FitGirl();
+//   const result = await provider.info('https://fitgirl-repacks.site/reverse-collapse-code-name-bakery/');
+//   // console.log(result);
+// })();
