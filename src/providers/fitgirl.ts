@@ -23,15 +23,22 @@ export class FitGirl extends BaseProvider {
 
     const container = $('div#content.site-content');
 
-    const titles: string[] = [];
+    const titles: {
+      title: string;
+      url: string;
+    }[] = [];
     container.find('article.post').each((i, el) => {
       const title = $(el).find('.entry-title').find('a').first().text().trim();
-
-      title && titles.push(title);
+      const url = $(el).find('.entry-title').find('a').first().attr('href') || '';
+      title &&
+        titles.push({
+          title,
+          url,
+        });
     });
 
     const result = await Fuzzy(
-      titles.map(title => ({ title, group: this.name })),
+      titles.map(title => ({ title: title.title, url: title.url, group: this.name })),
       query,
     );
 
