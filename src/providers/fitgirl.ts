@@ -1,5 +1,5 @@
 import { BaseProvider, Link, ProviderInfoResponse, ProviderResponse } from '../@types';
-import { Fuzzy } from '../utils';
+import { Fuzzy, parseSize } from '../utils';
 
 /**
  * FitGirl class.
@@ -56,7 +56,7 @@ export class FitGirl extends BaseProvider {
           .next('p')
           .find('a')
           .each((_idx, imgEl) => {
-            const screenshotUrl = $(imgEl).attr('href') || '';
+            const screenshotUrl = $(imgEl).find('img').attr('src') || '';
             if (screenshotUrl) {
               screenshots.push(screenshotUrl);
             }
@@ -72,7 +72,6 @@ export class FitGirl extends BaseProvider {
     $(magnet).each((_idx, el) => {
       const url = $(el).attr('href') || '';
       const name = $(el).text().trim();
-      console.log($(el).text());
       if (url) {
         downloads.push({ name, url });
       }
@@ -86,12 +85,35 @@ export class FitGirl extends BaseProvider {
       }
     });
 
+    let fileSize;
+    let repackSize;
+    const fileSizeSelector = "div p:contains('Original Size:')";
+    $(fileSizeSelector)
+      .first()
+      .text()
+      .split('\n')
+      .forEach(line => {
+        if (line.includes('Original Size:')) {
+          fileSize = parseSize(line.replace('Original Size:', '').trim());
+        } else if (line.includes('Repack Size:')) {
+          repackSize = parseSize(line.replace('Repack Size:', ''));
+        }
+      });
+
     return {
       title,
       group: this.name,
       downloads,
       image,
       screenshots,
+      fileSize,
+      repackSize,
     };
   }
 }
+
+// (async () => {
+//   const provider = new FitGirl();
+//   const result = await provider.info('https://fitgirl-repacks.site/reverse-collapse-code-name-bakery/');
+//   // console.log(result);
+// })();

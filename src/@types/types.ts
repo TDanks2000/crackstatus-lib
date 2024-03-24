@@ -12,6 +12,8 @@ export interface ProviderInfoResponse {
   downloads: Link[];
   image: string;
   screenshots: string[];
+  fileSize?: string;
+  repackSize?: string;
   [x: string]: unknown;
 }
 
