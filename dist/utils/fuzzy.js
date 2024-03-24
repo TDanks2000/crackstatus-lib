@@ -34,10 +34,11 @@ const Fuzzy = (list_1, query_1, ...args_1) => __awaiter(void 0, [list_1, query_1
     const items = list
         .filter(({ title }) => !flags.skip.some(flag => title.includes(flag)))
         // remove weird letters
-        .map(({ title, group, url }) => ({
+        .map(({ title, group, url, id }) => ({
         title: title.replace(clearRegex, ''),
         group,
         url,
+        id,
     }));
     // Create a Fuse instance with the items and options
     const fuse = new fuse_js_1.default(items, options);

@@ -7,6 +7,7 @@ import { BaseProvider, ProviderInfoResponse, ProviderResponse } from '../@types'
 export declare class FitGirl extends BaseProvider {
     name: string;
     url: string;
+    private headers;
     /**
      * Searches for a query within the provider's website.
      *
@@ -17,9 +18,9 @@ export declare class FitGirl extends BaseProvider {
     /**
      * Retrieves information from a given URL.
      *
-     * @param {string} url - The URL to fetch data from.
+     * @param {string} id - The URL or ID to fetch data from.
      * @returns {Promise<ProviderInfoResponse>} The provider info response object.
      */
-    info(url: string): Promise<ProviderInfoResponse>;
+    info(id: string): Promise<ProviderInfoResponse>;
 }
 //# sourceMappingURL=fitgirl.d.ts.map

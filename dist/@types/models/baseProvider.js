@@ -21,9 +21,9 @@ const proxy_1 = __importDefault(require("./proxy"));
  * @extends Proxy
  */
 class BaseProvider extends proxy_1.default {
-    loadHTML(url) {
+    loadHTML(url, options) {
         return __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.client.get(url);
+            const result = yield this.client.get(url, options);
             return (0, cheerio_1.load)(result.data);
         });
     }
