@@ -37,9 +37,14 @@ class FitGirl extends _types_1.BaseProvider {
             const titles = [];
             container.find('article.post').each((i, el) => {
                 const title = $(el).find('.entry-title').find('a').first().text().trim();
-                title && titles.push(title);
+                const url = $(el).find('.entry-title').find('a').first().attr('href') || '';
+                title &&
+                    titles.push({
+                        title,
+                        url,
+                    });
             });
-            const result = yield (0, utils_1.Fuzzy)(titles.map(title => ({ title, group: this.name })), query);
+            const result = yield (0, utils_1.Fuzzy)(titles.map(title => ({ title: title.title, url: title.url, group: this.name })), query);
             return result;
         });
     }
