@@ -20,7 +20,7 @@ abstract class BaseProvider extends Proxy {
       genres?: string[];
     },
     ...args: any[]
-  ): Promise<ProviderResponse | null>;
+  ): Promise<ProviderResponse[] | null>;
 
   abstract info(id: string, ...args: any[]): Promise<ProviderInfoResponse | null>;
 

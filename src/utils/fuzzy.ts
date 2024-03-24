@@ -10,7 +10,7 @@ const flags = {
 const defaultOptions = {
   includeScore: true,
   shouldSort: true,
-  threshold: 0.6, // Adjust the threshold as needed
+  threshold: 0.1, // Adjust the threshold as needed
   location: 0,
   distance: 100,
   maxPatternLength: 32,
@@ -24,7 +24,7 @@ export const Fuzzy = async (
   list: ProviderResponse[],
   query: string,
   options = defaultOptions,
-): Promise<ProviderResponse | null> => {
+): Promise<ProviderResponse[] | null> => {
   const items = list
     .filter(({ title }) => !flags.skip.some(flag => title.includes(flag)))
     // remove weird letters
@@ -41,6 +41,6 @@ export const Fuzzy = async (
   // Perform the search
   const result = fuse.search(query.replace(clearRegex, ''));
 
-  // Return the first result if any, otherwise null
-  return result.length > 0 ? result[0].item : null;
+  // Return the results if any, otherwise null
+  return result.length > 0 ? result.map(({ item }) => item) : null;
 };

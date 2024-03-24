@@ -23,7 +23,7 @@ export class FitGirl extends BaseProvider {
    * @param {string} query - The query to search for.
    * @returns {Promise<ProviderResponse | null>} A promise that resolves to the scraped data if found, or null otherwise.
    */
-  async search(query: string): Promise<ProviderResponse | null> {
+  async search(query: string): Promise<ProviderResponse[] | null> {
     const searchUrl = `${this.url}/?s=${encodeURIComponent(this.sanitizeString(query))}`;
 
     const $ = await this.loadHTML(searchUrl, {
@@ -137,8 +137,8 @@ export class FitGirl extends BaseProvider {
   }
 }
 
-// (async () => {
-//   const provider = new FitGirl();
-//   const result = await provider.search('batman');
-//   console.log(result);
-// })();
+(async () => {
+  const provider = new FitGirl();
+  const result = await provider.search('batman arkham city');
+  console.log(result);
+})();

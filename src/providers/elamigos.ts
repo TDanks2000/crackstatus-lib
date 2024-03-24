@@ -80,7 +80,7 @@ export class Elamigos extends BaseProvider {
   name: string = 'Elamigos';
   url: string = 'https://elamigos.site/';
 
-  async search(query: string): Promise<ProviderResponse | null> {
+  async search(query: string): Promise<ProviderResponse[] | null> {
     const $ = await this.loadHTML(this.url);
 
     const titles: { title: string; url: string }[] = [];
