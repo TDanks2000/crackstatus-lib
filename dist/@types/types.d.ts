@@ -1,6 +1,7 @@
 export interface ProviderResponse {
     title: string;
     group: string | null;
+    url?: string;
     [x: string]: unknown;
 }
 export interface ProviderInfoResponse {

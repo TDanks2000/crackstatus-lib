@@ -1,6 +1,8 @@
+//  TODO: make url required when i can be bothered
 export interface ProviderResponse {
   title: string;
   group: string | null;
+  url?: string;
   [x: string]: unknown;
 }
 

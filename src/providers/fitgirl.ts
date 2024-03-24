@@ -65,19 +65,24 @@ export class FitGirl extends BaseProvider {
     });
 
     const downloads: Link[] = [];
-    $('h3').each((_idx, el) => {
-      if ($(el).text().trim() === 'Download Mirrors') {
-        $(el)
-          .next('ul')
-          .find('li')
-          .each((_idx, liEl) => {
-            const linkEl = $(liEl).find('a').first();
-            const name = linkEl.text().trim();
-            const url = linkEl.attr('href') || '';
-            if (url) {
-              downloads.push({ name, url });
-            }
-          });
+
+    const magnet = "ul li a:contains('magnet')";
+    const torrent = "ul li a:contains('.torrent')";
+
+    $(magnet).each((_idx, el) => {
+      const url = $(el).attr('href') || '';
+      const name = $(el).text().trim();
+      console.log($(el).text());
+      if (url) {
+        downloads.push({ name, url });
+      }
+    });
+
+    $(torrent).each((_idx, el) => {
+      const url = $(el).attr('href') || '';
+      const name = $(el).text().trim();
+      if (url) {
+        downloads.push({ name, url });
       }
     });
 

@@ -28,9 +28,10 @@ export const Fuzzy = async (
   const items = list
     .filter(({ title }) => !flags.skip.some(flag => title.includes(flag)))
     // remove weird letters
-    .map(({ title, group }) => ({
+    .map(({ title, group, url }) => ({
       title: title.replace(clearRegex, ''),
       group,
+      url,
     }));
 
   // Create a Fuse instance with the items and options
