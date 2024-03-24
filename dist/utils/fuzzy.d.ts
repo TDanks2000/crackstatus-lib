@@ -8,5 +8,5 @@ export declare const Fuzzy: (list: ProviderResponse[], query: string, options?: 
     maxPatternLength: number;
     minMatchCharLength: number;
     keys: string[];
-}) => Promise<ProviderResponse | null>;
+}) => Promise<ProviderResponse[] | null>;
 //# sourceMappingURL=fuzzy.d.ts.map

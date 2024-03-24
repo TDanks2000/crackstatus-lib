@@ -12,7 +12,7 @@ declare abstract class BaseProvider extends Proxy {
     abstract search(query: string, extraData?: {
         year?: number;
         genres?: string[];
-    }, ...args: any[]): Promise<ProviderResponse | null>;
+    }, ...args: any[]): Promise<ProviderResponse[] | null>;
     abstract info(id: string, ...args: any[]): Promise<ProviderInfoResponse | null>;
     loadHTML(url: string, options?: AxiosRequestConfig): Promise<import("cheerio").CheerioAPI>;
     sanitizeString(string: string): string;

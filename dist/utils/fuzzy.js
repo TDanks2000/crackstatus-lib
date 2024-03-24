@@ -22,7 +22,7 @@ const flags = {
 const defaultOptions = {
     includeScore: true,
     shouldSort: true,
-    threshold: 0.6, // Adjust the threshold as needed
+    threshold: 0.1, // Adjust the threshold as needed
     location: 0,
     distance: 100,
     maxPatternLength: 32,
@@ -44,7 +44,7 @@ const Fuzzy = (list_1, query_1, ...args_1) => __awaiter(void 0, [list_1, query_1
     const fuse = new fuse_js_1.default(items, options);
     // Perform the search
     const result = fuse.search(query.replace(clearRegex, ''));
-    // Return the first result if any, otherwise null
-    return result.length > 0 ? result[0].item : null;
+    // Return the results if any, otherwise null
+    return result.length > 0 ? result.map(({ item }) => item) : null;
 });
 exports.Fuzzy = Fuzzy;

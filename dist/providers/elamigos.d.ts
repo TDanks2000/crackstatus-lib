@@ -6,7 +6,7 @@ import { BaseProvider, ProviderInfoResponse, ProviderResponse } from '../@types'
 export declare class Elamigos extends BaseProvider {
     name: string;
     url: string;
-    search(query: string): Promise<ProviderResponse | null>;
+    search(query: string): Promise<ProviderResponse[] | null>;
     info(id: string, ...args: any[]): Promise<ProviderInfoResponse | null>;
 }
 //# sourceMappingURL=elamigos.d.ts.map

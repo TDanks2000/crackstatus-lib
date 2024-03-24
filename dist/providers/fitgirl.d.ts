@@ -14,7 +14,7 @@ export declare class FitGirl extends BaseProvider {
      * @param {string} query - The query to search for.
      * @returns {Promise<ProviderResponse | null>} A promise that resolves to the scraped data if found, or null otherwise.
      */
-    search(query: string): Promise<ProviderResponse | null>;
+    search(query: string): Promise<ProviderResponse[] | null>;
     /**
      * Retrieves information from a given URL.
      *
