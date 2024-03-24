@@ -6,7 +6,8 @@
   "license": "MIT",
   "scripts": {
     "lint": "prettier --write .",
-    "build": "tsc"
+    "build": "tsc",
+    "preversion": "yarn build"
   },
   "devDependencies": {
     "@types/node": "^20.11.25",
