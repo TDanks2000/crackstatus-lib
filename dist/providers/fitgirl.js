@@ -130,8 +130,3 @@ class FitGirl extends _types_1.BaseProvider {
     }
 }
 exports.FitGirl = FitGirl;
-(() => __awaiter(void 0, void 0, void 0, function* () {
-    const provider = new FitGirl();
-    const result = yield provider.search('batman arkham city');
-    console.log(result);
-}))();

@@ -136,9 +136,3 @@ export class FitGirl extends BaseProvider {
     };
   }
 }
-
-(async () => {
-  const provider = new FitGirl();
-  const result = await provider.search('batman arkham city');
-  console.log(result);
-})();
